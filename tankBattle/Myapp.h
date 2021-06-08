@@ -1,5 +1,5 @@
 #pragma once
-#include "TermioApp.h"
+#include "termgui.h"
 #include <memory>
 using std::shared_ptr;
 using std::string;

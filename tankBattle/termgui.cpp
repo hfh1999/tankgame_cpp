@@ -1,4 +1,4 @@
-#include "TermioApp.h"
+#include "termgui.h"
 
 TermioApp::TermioApp()
 {

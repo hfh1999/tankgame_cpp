@@ -21,18 +21,15 @@
     <ClCompile Include="terminal.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TermioApp.cpp">
+    <ClCompile Include="Myapp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Myapp.cpp">
+    <ClCompile Include="termgui.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="terminal.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="TermioApp.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Myapp.h">
@@ -42,6 +39,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="resource1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="termgui.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
