@@ -25,7 +25,7 @@ void TermioApp::renderDrawables()
 }
 
 
-bool TermioApp::addDrawable(shared_ptr<DrawableObj> in_obj, bool is_visuable)
+bool TermioApp::addDrawable(shared_ptr<DrawMetaData> in_obj, bool is_visuable)
 {
 	return false;
 }
@@ -40,9 +40,9 @@ bool TermioApp::setVisuable(std::string id, bool visuable_value)
 	return false;
 }
 
-WrapDrawablObj TermioApp::getDrawable(std::string id)
+WrapDrawMetaData TermioApp::getDrawable(std::string id)
 {
-	return WrapDrawablObj();
+	return WrapDrawMetaData();
 }
 
 bool TermioApp::moveLeft(std::string id, SHORT steps)
@@ -115,7 +115,7 @@ void InputEvent::Debug()
 }
 
 
-DrawableObj::DrawableObj(std::string in_str)
+DrawMetaData::DrawMetaData(std::string in_str)
 {
 	if (in_str == "look")//当指定生成look图形时才执行
 	{
@@ -135,12 +135,12 @@ DrawableObj::DrawableObj(std::string in_str)
 	}
 }
 
-const std::vector<COORD>& DrawableObj::ReturnPos()
+const std::vector<COORD>& DrawMetaData::ReturnPos()
 {
 	return relative_pos;
 }
 
-const std::vector<TermChar>& DrawableObj::Returncontent()
+const std::vector<TermChar>& DrawMetaData::Returncontent()
 {
 	return content;
 }

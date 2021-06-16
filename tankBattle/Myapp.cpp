@@ -48,7 +48,7 @@ void Myapp::fresh()
 
 inline GameObj::GameObj(string file_name)
 {
-	graph_ptr = std::make_shared<DrawableObj>();//初始化图形对象
+	graph_ptr = std::make_shared<DrawMetaData>();//初始化图形对象
 }
 
 void GameObj::graph_move_left()

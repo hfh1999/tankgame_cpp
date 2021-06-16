@@ -17,7 +17,7 @@ public:
 	const std::vector<COORD>& ReturnPos();
 	const std::vector<TermChar>& Returncontent();
 };
-class WrapDrawable {//包装后的图形对象的引用
+class WrapDrawMetaData {//包装后的图形对象的引用
 public:
 	bool moveLeft() { return true; }//左移对象
 	bool moveRight() { return true; }//右移对象
@@ -53,7 +53,7 @@ public:
 	
 	/*以下的接口应调用drawobj的接口实现*/
 
-	WrapDrawable getDrawable(std::string id);//获取对图形对象的控制权
+	WrapDrawMetaData getDrawable(std::string id);//获取对图形对象的控制权
 	bool moveLeft(std::string id, SHORT steps = 1);//左移对象
 	bool moveRight(std::string id, SHORT steps = 1);//右移对象
 	bool moveUp(std::string id, SHORT steps = 1);//上移对象
