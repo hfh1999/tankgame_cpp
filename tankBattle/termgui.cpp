@@ -21,13 +21,38 @@ void TermioApp::input_event(InputEvent term_event)
 void TermioApp::renderDrawables()
 {
 	//print the renderDrawables.
-	std::cout << "renderDrawables... obj1,obj2,obj3\n";
+//	std::cout << "renderDrawables... obj1,obj2,obj3\n";
+	for (auto item : obj_list)
+	{
+		if (item->visualable)
+		{
+			auto len = (item->relative_pos).size();
+			auto pos_array = item->relative_pos;
+			auto char_array = item->content;
+			auto origin_point_x = item->origin_point.X;
+			auto origin_point_y = item->origin_point.Y;
+			auto old_point_x = item->old_point.X;
+			auto old_point_y = item->old_point.Y;
+
+			for (int index = 0; index < len; index++)
+				erase(old_point_x + pos_array[index].X,old_point_y + pos_array[index].Y);
+			for (int index = 0; index < len; index++)
+				draw(pos_array[index].X + origin_point_x, pos_array[index].Y + origin_point_y, char_array[index]);
+
+		}
+	}
 }
 
 
-bool TermioApp::addDrawable(shared_ptr<DrawMetaData> in_obj, bool is_visuable)
+bool TermioApp::addDrawable(shared_ptr<Drawable> in_obj, bool is_visuable)
 {
-	return false;
+	if (in_obj->is_managed)
+		return false;  //已经加入过,加入失败
+	else
+	{
+		obj_list.push_back(in_obj);
+		in_obj->is_managed = true;
+	}
 }
 
 bool TermioApp::removeDrawable(std::string id)
@@ -39,32 +64,6 @@ bool TermioApp::setVisuable(std::string id, bool visuable_value)
 {
 	return false;
 }
-
-WrapDrawMetaData TermioApp::getDrawable(std::string id)
-{
-	return WrapDrawMetaData();
-}
-
-bool TermioApp::moveLeft(std::string id, SHORT steps)
-{
-	return false;
-}
-
-bool TermioApp::moveRight(std::string id, SHORT steps)
-{
-	return false;
-}
-
-bool TermioApp::moveUp(std::string id, SHORT steps)
-{
-	return false;
-}
-
-bool TermioApp::moveDown(std::string id, SHORT steps)
-{
-	return false;
-}
-
 
 void TermioApp::eventloop()
 {
@@ -115,11 +114,10 @@ void InputEvent::Debug()
 }
 
 
-DrawMetaData::DrawMetaData(std::string in_str)
+Drawable::Drawable(std::string in_str) :is_managed(false), visualable(false), origin_point(COORD{ 0,0 }), relative_pos(std::vector<COORD>()), content(std::vector<TermChar>())
 {
 	if (in_str == "look")//当指定生成look图形时才执行
 	{
-		id = std::string("look");
 		TermChar ch(' ', TermChar::Foreground_Default, TermChar::Background_Yellow);//黄色空格
 		for (SHORT i = 1; i <= 6; i++)//画出四个竖杠
 		{
@@ -135,12 +133,41 @@ DrawMetaData::DrawMetaData(std::string in_str)
 	}
 }
 
-const std::vector<COORD>& DrawMetaData::ReturnPos()
+void Drawable::move_left(SHORT step)
+{
+	old_point = origin_point;
+	origin_point.X -= step;
+}
+
+void Drawable::move_right(SHORT step)
+{
+	old_point = origin_point;
+	origin_point.X += step;
+}
+
+void Drawable::move_up(SHORT step)
+{
+	old_point = origin_point;
+	origin_point.Y -= step;
+}
+
+void Drawable::move_down(SHORT step)
+{
+	old_point = origin_point;
+	origin_point.Y += step;
+}
+
+void Drawable::set_visualable()
+{
+	visualable = true;
+}
+
+const std::vector<COORD>& Drawable::ReturnPos()
 {
 	return relative_pos;
 }
 
-const std::vector<TermChar>& DrawMetaData::Returncontent()
+const std::vector<TermChar>& Drawable::Returncontent()
 {
 	return content;
 }

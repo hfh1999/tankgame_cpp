@@ -14,9 +14,13 @@ void Myapp::input_event(InputEvent  term_event)
 void Myapp::run()
 {
 	//游戏运行的主逻辑在这里
+	auto look = std::make_shared<Drawable>("look");
+	addDrawable(look);
+	look->set_visualable();
 	while (1)
 	{
 		render();
+		look->move_right(1);
 		fresh();
 	}
 }
@@ -26,8 +30,6 @@ void Myapp::render()
 	/*画图*/
 	//std::cout << "[run:render] render here"<<std::endl;
 	//example start;
-	auto tankDrawable = getDrawable("tank");
-	tankDrawable.moveDown();
 	//example end;
 	renderDrawables();//test draw "look"
 
@@ -37,18 +39,13 @@ void Myapp::fresh()
 {
 	/*更改与显示相关的数据结构*/
 	/*input_event可更改这里面的更新逻辑*/
-	//std::cout << "[run:fresh] fresh here"<<std::endl;
-	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-	std::cout << "here to change the data to control drawable obj.\n";
-	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-	//eraseDrawable(DrawableObj("look"));
-	//clear需要刷新的物体
-	cls();
+	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	//cls();
 }
 
 inline GameObj::GameObj(string file_name)
 {
-	graph_ptr = std::make_shared<DrawMetaData>();//初始化图形对象
+	graph_ptr = std::make_shared<Drawable>();//初始化图形对象
 }
 
 void GameObj::graph_move_left()

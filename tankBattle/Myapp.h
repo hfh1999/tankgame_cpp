@@ -24,7 +24,7 @@ public:
 	void set_speed(int in_num);
 	void set_hp_speed(int offset);
 private:
-	shared_ptr<DrawMetaData> graph_ptr;
+	shared_ptr<Drawable> graph_ptr;
 	int hp;//heath points HP	
 	int ac;//»¤¼×
 	int ap;//¹¥»÷Á¦
