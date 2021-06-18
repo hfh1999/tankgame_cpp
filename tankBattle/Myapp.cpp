@@ -3,7 +3,14 @@
 void Myapp::input_event(InputEvent  term_event)
 {
 	term_event.Debug();
-	std::cout << "this is my input_event\n";
+	//std::cout << "this is my input_event\n";
+	static int count = 0;
+	if (count % 2 == 0)
+		if (right)
+			right = false;
+		else
+			right = true;
+	count++;
 	//switch (ch)
 	//{
 	//	case 1: do something to the screen
@@ -23,7 +30,12 @@ void Myapp::run()
 	while (1)
 	{
 		render();
-		tank->move_right(1);
+		if(right)
+			tank->move_right(1);
+		else
+		{
+			tank->move_left(1);
+		}
 		fresh();
 	}
 }

@@ -37,6 +37,7 @@ public:
 	void input_event(InputEvent  term_event)override;//改变一些这个类的参数来使得游戏运行参数变换
 	void run();
 private:
+	bool right = true;
 	void render();//渲染一帧
 	void fresh();//刷新数据状态的函数
 
