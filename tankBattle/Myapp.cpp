@@ -14,13 +14,16 @@ void Myapp::input_event(InputEvent  term_event)
 void Myapp::run()
 {
 	//游戏运行的主逻辑在这里
-	auto look = std::make_shared<Drawable>("look");
-	addDrawable(look);
-	look->set_visualable();
+//	auto look = std::make_shared<Drawable>("look");
+//	addDrawable(look);
+//	look->set_visualable();
+	auto tank = get_drawable_from_file("tank.draw");
+	addDrawable(tank);
+	tank->set_visualable();
 	while (1)
 	{
 		render();
-		look->move_right(1);
+		tank->move_right(1);
 		fresh();
 	}
 }
@@ -39,7 +42,7 @@ void Myapp::fresh()
 {
 	/*更改与显示相关的数据结构*/
 	/*input_event可更改这里面的更新逻辑*/
-	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	//cls();
 }
 

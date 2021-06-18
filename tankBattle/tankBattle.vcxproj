@@ -152,17 +152,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="drawable.cpp" />
     <ClCompile Include="Myapp.cpp" />
     <ClCompile Include="tankBattle.cpp" />
     <ClCompile Include="terminal.cpp" />
     <ClCompile Include="termgui.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="drawable.h" />
     <ClInclude Include="Myapp.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
     <ClInclude Include="terminal.h" />
     <ClInclude Include="termgui.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tank.draw" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -38,7 +38,6 @@ void TermioApp::renderDrawables()
 				erase(old_point_x + pos_array[index].X,old_point_y + pos_array[index].Y);
 			for (int index = 0; index < len; index++)
 				draw(pos_array[index].X + origin_point_x, pos_array[index].Y + origin_point_y, char_array[index]);
-
 		}
 	}
 }
@@ -112,64 +111,4 @@ void InputEvent::Debug()
 {
 	//std::cout << "[InputEvent Debug]\n";
 }
-
-
-Drawable::Drawable(std::string in_str) :is_managed(false), visualable(false), origin_point(COORD{ 0,0 }), relative_pos(std::vector<COORD>()), content(std::vector<TermChar>())
-{
-	if (in_str == "look")//当指定生成look图形时才执行
-	{
-		TermChar ch(' ', TermChar::Foreground_Default, TermChar::Background_Yellow);//黄色空格
-		for (SHORT i = 1; i <= 6; i++)//画出四个竖杠
-		{
-			for (SHORT j = 0; j < 4; j++)
-			{
-				relative_pos.push_back(COORD{ 1 + 4 * j,i });
-				content.push_back(ch);
-			}
-		}
-	}
-	else {
-		//以x0,y0;x1,y1;x2,y2;格式绘图.
-	}
-}
-
-void Drawable::move_left(SHORT step)
-{
-	old_point = origin_point;
-	origin_point.X -= step;
-}
-
-void Drawable::move_right(SHORT step)
-{
-	old_point = origin_point;
-	origin_point.X += step;
-}
-
-void Drawable::move_up(SHORT step)
-{
-	old_point = origin_point;
-	origin_point.Y -= step;
-}
-
-void Drawable::move_down(SHORT step)
-{
-	old_point = origin_point;
-	origin_point.Y += step;
-}
-
-void Drawable::set_visualable()
-{
-	visualable = true;
-}
-
-const std::vector<COORD>& Drawable::ReturnPos()
-{
-	return relative_pos;
-}
-
-const std::vector<TermChar>& Drawable::Returncontent()
-{
-	return content;
-}
-
 
