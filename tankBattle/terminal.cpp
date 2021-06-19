@@ -76,6 +76,24 @@ Terminal::Terminal()
 	std::wcout << L"\x1b[?1049h";//启用备用缓冲区
 	std::wcout << L"\x1b[?25l";//隐藏光标
 
+	//test change font.
+	//CONSOLE_FONT_INFOEX font_info;
+	//font_info.cbSize = sizeof(font_info);
+	//auto flag = GetCurrentConsoleFontEx(terminal_out, false, &font_info);
+	//if (flag)
+	//{ }
+	//else
+	//{
+	//	std::cout << "failed"<<std::endl;
+	//}
+	//std::cout << "font size >  X = " << font_info.dwFontSize.X;
+	//std::cout << "  Y = " << font_info.dwFontSize.Y<<std::endl;
+	////std::cout << "font index" << font_info.nFont << std::endl;
+	//auto name = std::wstring(font_info.FaceName);
+	//std::cout << name.size();
+	//std::wcout << name;
+	//SetCurrentConsoleFontEx(terminal_out, false, &font_info);
+
 }
 
 Terminal::~Terminal()

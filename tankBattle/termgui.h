@@ -7,15 +7,18 @@
 #include <memory>
 #include "drawable.h"
 using std::shared_ptr;
-class InputEvent {
-private:
+struct KeyEvent {
+	// 参见 https://docs.microsoft.com/en-us/windows/console/key-event-record-str
 	WORD key_code;
+
 	BOOL key_down;//status:up/down
 	WORD repeat_count;//key is being held down.
-public:
-	InputEvent(INPUT_RECORD * input_record);
+
+	KeyEvent(INPUT_RECORD * input_record);
 	void Debug();
 };
+
+/*该类是Drawable的友元*/
 class TermioApp :
 	public Terminal
 {
@@ -23,7 +26,7 @@ public:
 	TermioApp();
 	~TermioApp();
 
-	virtual void input_event(InputEvent term_event);
+	virtual void key_event(KeyEvent term_event);
 	void renderDrawables();//负责将所有drawable object渲染出来
 
 	bool addDrawable(shared_ptr<Drawable> in_obj, bool is_visuable = true);//加入Drawable object
@@ -36,6 +39,7 @@ private:
 	bool loop_flag = true;//是否停止事件循环
 	std::vector<shared_ptr<Drawable>> obj_list;//app已经管理的Drawable object的列表
 
+	COORD __coord_trans(COORD in_coord, Drawable::DrawDirect direct);
 	void eventloop();//类的事件处理循环:处理输入(事件)
 
 	//need event_call_back pointer here.

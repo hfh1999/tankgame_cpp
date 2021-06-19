@@ -1,16 +1,27 @@
 #include "Myapp.h"
 
-void Myapp::input_event(InputEvent  term_event)
+void Myapp::key_event(KeyEvent  term_event)
 {
 	term_event.Debug();
-	//std::cout << "this is my input_event\n";
-	static int count = 0;
-	if (count % 2 == 0)
-		if (right)
-			right = false;
-		else
-			right = true;
-	count++;
+	if (term_event.key_down)
+	{
+		switch (term_event.key_code)
+		{
+		case VK_UP:// ÉÏ¼ıÍ·°´¼ü
+			v_direct = Direct::Up;
+			break;
+		case VK_DOWN:
+			v_direct = Direct::Down;
+			break;
+		case VK_LEFT:
+			v_direct = Direct::Left;
+			break;
+		case VK_RIGHT:
+			v_direct = Direct::Right;
+			break;
+
+		}
+	}
 	//switch (ch)
 	//{
 	//	case 1: do something to the screen
@@ -30,11 +41,20 @@ void Myapp::run()
 	while (1)
 	{
 		render();
-		if(right)
-			tank->move_right(1);
-		else
+		switch (v_direct)
 		{
+		case Direct::Up:
+			tank->move_up(1);
+			break;
+		case Direct::Down:
+			tank->move_down(1);
+			break;
+		case Direct::Left:
 			tank->move_left(1);
+			break;
+		case Direct::Right:
+			tank->move_right(1);
+			break;
 		}
 		fresh();
 	}

@@ -1,7 +1,7 @@
 #include "drawable.h"
 #include <fstream>
 using std::ifstream;
-Drawable::Drawable(std::string in_str) :is_managed(false), visualable(false), origin_point(COORD{ 0,0 }), relative_pos(std::vector<COORD>()), content(std::vector<TermChar>())
+Drawable::Drawable(std::string in_str) :is_managed(false), visualable(false), origin_point(COORD{ 0,0 }), relative_pos(std::vector<COORD>()), content(std::vector<TermChar>()),direct(DrawDirect::Up),old_direct(direct)
 {
 	if (in_str == "look")//当指定生成look图形时才执行
 	{
@@ -18,6 +18,26 @@ Drawable::Drawable(std::string in_str) :is_managed(false), visualable(false), or
 	else {
 		//以x0,y0;x1,y1;x2,y2;格式绘图.
 	}
+}
+
+void Drawable::turn_left()
+{
+	direct = DrawDirect::Left;
+}
+
+void Drawable::turn_right()
+{
+	direct = DrawDirect::Right;
+}
+
+void Drawable::turn_up()
+{
+	direct = DrawDirect::Up;
+}
+
+void Drawable::turn_down()
+{
+	direct = DrawDirect::Down;
 }
 
 void Drawable::move_left(SHORT step)

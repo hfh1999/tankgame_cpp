@@ -1,6 +1,6 @@
 #include "termgui.h"
 
-TermioApp::TermioApp()
+TermioApp::TermioApp():Terminal()
 {
 	termapp_in = GetStdHandle(STD_INPUT_HANDLE);
 	event_loop = std::thread(&TermioApp::eventloop, this);
@@ -13,7 +13,7 @@ TermioApp::~TermioApp()
 	std::cout << "[TermioApp]event loop terminate";
 }
 
-void TermioApp::input_event(InputEvent term_event)
+void TermioApp::key_event(KeyEvent term_event)
 {
 	//do nothing
 }
@@ -33,11 +33,20 @@ void TermioApp::renderDrawables()
 			auto origin_point_y = item->origin_point.Y;
 			auto old_point_x = item->old_point.X;
 			auto old_point_y = item->old_point.Y;
+			auto direct = item->direct;
+			auto direct_old = item->old_direct;
 
 			for (int index = 0; index < len; index++)
-				erase(old_point_x + pos_array[index].X,old_point_y + pos_array[index].Y);
+			{
+
+				auto coord_to_erase = __coord_trans(COORD{ old_point_x + pos_array[index].X,old_point_y + pos_array[index].Y },direct_old);
+				erase(coord_to_erase.X,coord_to_erase.Y);
+			}
 			for (int index = 0; index < len; index++)
-				draw(pos_array[index].X + origin_point_x, pos_array[index].Y + origin_point_y, char_array[index]);
+			{
+				auto coord_to_draw = __coord_trans(COORD{ pos_array[index].X + origin_point_x, pos_array[index].Y + origin_point_y },direct );
+				draw(coord_to_draw.X,coord_to_draw.Y,char_array[index]);
+			}
 		}
 	}
 }
@@ -64,6 +73,32 @@ bool TermioApp::setVisuable(std::string id, bool visuable_value)
 	return false;
 }
 
+
+COORD TermioApp::__coord_trans(COORD in_coord, Drawable::DrawDirect direct)
+{
+	if (in_coord.X == 0 && in_coord.Y == 0)
+		return COORD{ 0,0 };
+	else
+	{
+		switch (direct)
+		{
+		case Drawable::DrawDirect::Up:
+			return in_coord;
+			break;
+		case Drawable::DrawDirect::Down:
+			return COORD{ in_coord.X,-in_coord.Y };
+			break;
+		case Drawable::DrawDirect::Left:
+			return COORD{ -in_coord.Y,in_coord.X };
+			break;
+		case Drawable::DrawDirect::Right:
+			return COORD{ in_coord.Y,in_coord.X };
+			break;
+
+		}
+	}
+}
+
 void TermioApp::eventloop()
 {
 	INPUT_RECORD irInBuf[128];
@@ -82,7 +117,7 @@ void TermioApp::eventloop()
 				break;
 			case KEY_EVENT:
 				//std::cout << "[eventloop]key event\n";
-				input_event(InputEvent(&irInBuf[counter]));
+				key_event(KeyEvent(&irInBuf[counter]));
 				break;
 			case MOUSE_EVENT:
 				//std::cout << "[eventloop]mouse event\n";
@@ -100,14 +135,14 @@ void TermioApp::eventloop()
 	}
 }
 
-InputEvent::InputEvent(INPUT_RECORD * input_record)
+KeyEvent::KeyEvent(INPUT_RECORD * input_record)
 {
 	key_code = input_record->Event.KeyEvent.wVirtualKeyCode;
 	key_down = input_record->Event.KeyEvent.bKeyDown;
 	repeat_count = input_record->Event.KeyEvent.wRepeatCount;
 }
 
-void InputEvent::Debug()
+void KeyEvent::Debug()
 {
 	//std::cout << "[InputEvent Debug]\n";
 }
