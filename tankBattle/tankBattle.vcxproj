@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="drawable.cpp" />
+    <ClCompile Include="drawableobj.cpp" />
     <ClCompile Include="Myapp.cpp" />
     <ClCompile Include="tankBattle.cpp" />
     <ClCompile Include="terminal.cpp" />
@@ -160,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="drawable.h" />
+    <ClInclude Include="drawableobj.h" />
     <ClInclude Include="Myapp.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />

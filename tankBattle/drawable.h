@@ -4,7 +4,7 @@
 #include "terminal.h"
 class Drawable {//图形的基类
 private:
-	const enum DrawDirect{Left,Right,Up,Down}; // 图形朝向的定义
+	const enum DrawDirect{Up,Right,Down,Left}; // 图形朝向的定义
 
 	bool is_managed;// 是否已经被显示接管
 	friend class TermioApp;

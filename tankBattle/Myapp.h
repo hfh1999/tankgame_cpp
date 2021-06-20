@@ -1,35 +1,20 @@
 #pragma once
 #include "termgui.h"
+#include "drawableobj.h"
 #include <memory>
 using std::shared_ptr;
 using std::string;
-class GameObj {
+class GameObj :public DrawableObj {
 public:
-	GameObj(string file_name);//打开配置文件创建一个Gameobj.
+	GameObj() = delete;
+	GameObj(std::shared_ptr<Drawable> inDrawable):DrawableObj(inDrawable){}
 
-	/*图形移动操作*/
-	void graph_move_left();
-	void graph_move_right();
-	void graph_move_up();
-	void graph_move_down();
-	string get_id();
-
-	/*数据操作*/
-	void set_hp(int in_num);
-	void set_hp_offset(int offset);
-	void set_ac(int in_num);
-	void set_ac_offset(int offset);
-	void set_ap(int in_num);
-	void set_ap_offset(int offset);
-	void set_speed(int in_num);
-	void set_hp_speed(int offset);
 private:
-	shared_ptr<Drawable> graph_ptr;
-	int hp;//heath points HP	
-	int ac;//护甲
-	int ap;//攻击力
-	int speed;//移动速度
+	int health_point;//生命值
+	int attack_point;//攻击力
+	int shield_point;//护甲值
 };
+
 class Myapp :
 	public TermioApp
 {
@@ -39,6 +24,7 @@ public:
 	void run();
 private:
 	Direct v_direct; // 速度方向
+	SHORT v; //每秒的移动速度
 
 	void render();//渲染一帧
 	void fresh();//刷新数据状态的函数

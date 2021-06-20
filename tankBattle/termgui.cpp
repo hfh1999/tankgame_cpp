@@ -1,4 +1,5 @@
 #include "termgui.h"
+#include <map>
 
 TermioApp::TermioApp():Terminal()
 {
@@ -39,13 +40,13 @@ void TermioApp::renderDrawables()
 			for (int index = 0; index < len; index++)
 			{
 
-				auto coord_to_erase = __coord_trans(COORD{ old_point_x + pos_array[index].X,old_point_y + pos_array[index].Y },direct_old);
-				erase(coord_to_erase.X,coord_to_erase.Y);
+				auto relative_coord_to_erase = __coord_trans(COORD{pos_array[index].X,pos_array[index].Y },direct_old);
+				erase(relative_coord_to_erase.X + old_point_x,old_point_y + relative_coord_to_erase.Y);
 			}
 			for (int index = 0; index < len; index++)
 			{
-				auto coord_to_draw = __coord_trans(COORD{ pos_array[index].X + origin_point_x, pos_array[index].Y + origin_point_y },direct );
-				draw(coord_to_draw.X,coord_to_draw.Y,char_array[index]);
+				auto relative_coord_to_draw = __coord_trans(COORD{ pos_array[index].X, pos_array[index].Y },direct );
+				draw(relative_coord_to_draw.X + origin_point_x,relative_coord_to_draw.Y+origin_point_y,char_array[index]);
 			}
 		}
 	}
@@ -80,47 +81,108 @@ COORD TermioApp::__coord_trans(COORD in_coord, Drawable::DrawDirect direct)
 		return COORD{ 0,0 };
 	else
 	{
-		switch (direct)
+		switch (direct - Drawable::DrawDirect::Up)
 		{
-		case Drawable::DrawDirect::Up:
+		case 0: //坐标不变
 			return in_coord;
 			break;
-		case Drawable::DrawDirect::Down:
-			return COORD{ in_coord.X,-in_coord.Y };
+		case 2://顺时针180度
+			return COORD{ -in_coord.X,-in_coord.Y };
 			break;
-		case Drawable::DrawDirect::Left:
+		case 3://逆时针90度
+			return COORD{ in_coord.Y,-in_coord.X };
+			break;
+		case 1://顺时针90度
 			return COORD{ -in_coord.Y,in_coord.X };
-			break;
-		case Drawable::DrawDirect::Right:
-			return COORD{ in_coord.Y,in_coord.X };
 			break;
 
 		}
 	}
 }
 
+void TermioApp::__get_key_hold_time(WORD key_code,bool key_down,WORD repeat) {
+//	static std::map<WORD, counter_data> inner_meta;
+//	std::pair<WORD, counter_data> tmp_pair;
+	static bool is_inited = false;
+
+	if (!is_inited)
+	{
+		/* 这里可能要读取键盘定义表*/
+		tmp_pair.first = VK_UP;
+		inner_meta.insert(tmp_pair);
+		tmp_pair.first = VK_RIGHT;
+		inner_meta.insert(tmp_pair);
+		tmp_pair.first = VK_DOWN;
+		inner_meta.insert(tmp_pair);
+		tmp_pair.first = VK_LEFT;
+		inner_meta.insert(tmp_pair);
+
+		for (auto item:inner_meta)
+		{
+			inner_meta[item.first] =  counter_data{0,false};
+		}
+		is_inited = true;
+	}
+	
+	if (key_down)//按下的时候
+	{
+		auto find_result = inner_meta.at(key_code);
+			//std::cout << "repeat>>>>" << repeat;
+			//std::cout << "find>>>>" << find_result.counter;
+		if (find_result.flag)//之前就已经被按下过了
+		{
+			// 注意类型相加可能会溢出,这里强行越过这一限制
+			inner_meta[key_code] = counter_data{(WORD)(find_result.counter + repeat),find_result.flag };
+		}
+		else {
+
+			inner_meta[key_code] = counter_data{(WORD)(find_result.counter + repeat),true };
+			//std::cout << "";
+		}
+	}
+	else
+	{
+		inner_meta[key_code] = counter_data{ 0,false };//这时计数已经无所谓了
+		//std::cout << "release.";
+	}
+
+}
 void TermioApp::eventloop()
 {
 	INPUT_RECORD irInBuf[128];
 	DWORD cNumRead;//读取了多少记录
+	DWORD queueLen;
 	while(loop_flag)
 	{
 		/*	get some event */
 		//get input and transmit it as io_event class
 		//call input_event;
+		GetNumberOfConsoleInputEvents(termapp_in, &queueLen);
+		if (queueLen == 0)
+		{
+			//std::cout << "no input";
+			std::this_thread::sleep_for(std::chrono::milliseconds(5));
+			continue;
+		}
 		ReadConsoleInput(termapp_in, irInBuf, 128, &cNumRead);
 		for (DWORD counter = 0; counter < cNumRead; counter++)
 		{
+			auto tmp = irInBuf[counter];
+			auto repeat_counter = inner_meta[tmp.Event.KeyEvent.wVirtualKeyCode].counter;
 			switch (irInBuf[counter].EventType)
 			{
 			case FOCUS_EVENT:
 				break;
 			case KEY_EVENT:
 				//std::cout << "[eventloop]key event\n";
-				key_event(KeyEvent(&irInBuf[counter]));
+				//执行一次按键测时函数
+				__get_key_hold_time(tmp.Event.KeyEvent.wVirtualKeyCode, tmp.Event.KeyEvent.bKeyDown,tmp.Event.KeyEvent.wRepeatCount);
+				//std::cout << "counter = " << repeat_counter;
+			//	std::cout << "counter" << tmp.Event.KeyEvent.wRepeatCount;
+				key_event(KeyEvent(&irInBuf[counter],repeat_counter));
 				break;
 			case MOUSE_EVENT:
-				//std::cout << "[eventloop]mouse event\n";
+				std::cout << "[eventloop]mouse event\n";
 				break;
 			case WINDOW_BUFFER_SIZE_EVENT:
 				//std::cout << "[eventloop]window buffer size event.\n";
@@ -135,11 +197,17 @@ void TermioApp::eventloop()
 	}
 }
 
-KeyEvent::KeyEvent(INPUT_RECORD * input_record)
+KeyEvent::KeyEvent(INPUT_RECORD * input_record, WORD time)
 {
 	key_code = input_record->Event.KeyEvent.wVirtualKeyCode;
 	key_down = input_record->Event.KeyEvent.bKeyDown;
-	repeat_count = input_record->Event.KeyEvent.wRepeatCount;
+	hold_time = time;
+}
+
+SHORT KeyEvent::get_key_hold_time()
+{
+	//return __get_key_hold_time(key_code,key_down);
+	return hold_time;
 }
 
 void KeyEvent::Debug()
