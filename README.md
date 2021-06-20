@@ -9,11 +9,6 @@ c++ 写的终端版坦克大战,仅可在windows上编译运行
 #### 编译运行
 使用visual stdio 2017编译即可
 
-#### 演示
-目前只支持四个按键，键盘上的↑ ↓ ← →
-
-![showcase](https://gitee.com/hfh1999/tankgame_cpp/raw/master/showcase.gif)
-
 #### 后续计划
 1. 添加炮弹动画及毁伤效果
 2. 添加敌人ai
@@ -24,3 +19,8 @@ c++ 写的终端版坦克大战,仅可在windows上编译运行
 1. 添加多人局域网模式
 2. 添加公网对战模式
 3. 编写公网服务器
+
+#### 演示
+目前只支持四个按键，键盘上的↑ ↓ ← →
+
+![showcase](https://gitee.com/hfh1999/tankgame_cpp/raw/master/showcase.gif)
