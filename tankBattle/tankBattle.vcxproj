@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="tank.draw" />
+    <None Include="wall.draw" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -50,3 +50,9 @@ void DrawableObj::set_unvisualable()
 {
 	ptr_to_Drawable->set_unvisualable();
 }
+
+void DrawableObj::set_static(bool flag)
+{
+	ptr_to_Drawable->set_static(flag);
+}
+

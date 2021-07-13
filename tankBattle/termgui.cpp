@@ -37,11 +37,15 @@ void TermioApp::renderDrawables()
 			auto direct = item->direct;
 			auto direct_old = item->old_direct;
 
-			for (int index = 0; index < len; index++)
+			if (!item->is_static)
 			{
 
-				auto relative_coord_to_erase = __coord_trans(COORD{pos_array[index].X,pos_array[index].Y },direct_old);
-				erase(relative_coord_to_erase.X + old_point_x,old_point_y + relative_coord_to_erase.Y);
+				for (int index = 0; index < len; index++)
+				{
+
+					auto relative_coord_to_erase = __coord_trans(COORD{ pos_array[index].X,pos_array[index].Y }, direct_old);
+					erase(relative_coord_to_erase.X + old_point_x, old_point_y + relative_coord_to_erase.Y);
+				}
 			}
 			for (int index = 0; index < len; index++)
 			{

@@ -61,5 +61,8 @@
     <None Include="tank.draw">
       <Filter>源文件</Filter>
     </None>
+    <None Include="wall.draw">
+      <Filter>源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

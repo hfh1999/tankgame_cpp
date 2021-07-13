@@ -8,10 +8,11 @@ private:
 
 	bool is_managed;// 是否已经被显示接管
 	friend class TermioApp;
-	friend  std::shared_ptr<Drawable> get_drawable_from_file(std::string filename);
+	friend  std::shared_ptr<Drawable> get_drawable_from_file(const std::string & filename);
 
 	/* 下面是内部的数据 */
 
+	bool is_static;// 静态物体不需要重复渲染
 	bool visualable;//可见性
 	DrawDirect direct;//表示图形的朝向
 	DrawDirect old_direct; //老朝向
@@ -38,6 +39,8 @@ public:
 	void move_down(SHORT step);
 	void set_visualable(); // 让图形可见
 	void set_unvisualable();// 让图形不可见
+	COORD ret_coord() { return origin_point; }
 	
+	void set_static(bool flag) { is_static = flag; }
 };
-std::shared_ptr<Drawable> get_drawable_from_file(std::string filename);
+std::shared_ptr<Drawable> get_drawable_from_file(const std::string & filename);

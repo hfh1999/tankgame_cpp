@@ -101,7 +101,7 @@ COORD __resolve_coord_line(const std::string & instr)
 
 	return COORD{ (SHORT)std::stoi(left),(SHORT)std::stoi(right) }; // 强制转换可行,因为总是用SHORT
 }
-std::shared_ptr<Drawable> get_drawable_from_file(std::string filename)
+std::shared_ptr<Drawable> get_drawable_from_file(const std::string & filename)
 {
 
 	ifstream draw_file(filename);

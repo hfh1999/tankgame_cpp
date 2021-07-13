@@ -17,7 +17,8 @@ public:
 	void turn_down();
 	void set_visualable();
 	void set_unvisualable();
-
+	void set_static(bool flag);
+	COORD ret_coord() { return ptr_to_Drawable->ret_coord(); }
 private:
 	std::shared_ptr<Drawable> ptr_to_Drawable;
 };
