@@ -5,6 +5,21 @@ TermioApp::TermioApp():Terminal()
 {
 	termapp_in = GetStdHandle(STD_INPUT_HANDLE);
 	event_loop = std::thread(&TermioApp::eventloop, this);
+
+	//禁止快速编辑模式,防止在鼠标点击的时候卡住
+	DWORD prev_mode;
+	if (!GetConsoleMode(termapp_in, &prev_mode))
+	{
+		std::cout << "Failed to get mode:" << GetLastError() << std::endl;
+		getchar();
+	}
+	prev_mode = (prev_mode & ~ENABLE_QUICK_EDIT_MODE)|ENABLE_EXTENDED_FLAGS;
+	if (!SetConsoleMode(termapp_in,prev_mode))
+	{
+		std::cout << "Failed to disable quick edit mode:" << GetLastError()<<std::endl;
+		std::cout << prev_mode;
+		getchar();
+	}
 }
 
 TermioApp::~TermioApp()

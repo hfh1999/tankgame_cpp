@@ -61,6 +61,11 @@ Terminal::Terminal()
 	/*需要异常处理*/
 	terminal_out = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_SCREEN_BUFFER_INFO info;
+
+	//最大化窗口
+	ShowWindow(GetConsoleWindow(), SW_MAXIMIZE);
+	// TODO:需要让窗口固定大小不变,或是让窗口可以自适应大小
+
 	GetConsoleScreenBufferInfo(terminal_out, &info);
 	display_size.Left = info.srWindow.Left + 1;
 	display_size.Right = info.srWindow.Right + 1;
@@ -72,34 +77,19 @@ Terminal::Terminal()
 	DWORD oldmode;
 	GetConsoleMode(terminal_out, &oldmode);
 	oldmode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;//使得terminal sequence有效
-	SetConsoleMode(terminal_out, oldmode);
+	if (!SetConsoleMode(terminal_out, oldmode))
+	{
+		std::cout << "Failed to set Console:" << GetLastError() << std::endl;
+	}
 	std::wcout << L"\x1b[?1049h";//启用备用缓冲区
 	std::wcout << L"\x1b[?25l";//隐藏光标
-
-	//test change font.
-	//CONSOLE_FONT_INFOEX font_info;
-	//font_info.cbSize = sizeof(font_info);
-	//auto flag = GetCurrentConsoleFontEx(terminal_out, false, &font_info);
-	//if (flag)
-	//{ }
-	//else
-	//{
-	//	std::cout << "failed"<<std::endl;
-	//}
-	//std::cout << "font size >  X = " << font_info.dwFontSize.X;
-	//std::cout << "  Y = " << font_info.dwFontSize.Y<<std::endl;
-	////std::cout << "font index" << font_info.nFont << std::endl;
-	//auto name = std::wstring(font_info.FaceName);
-	//std::cout << name.size();
-	//std::wcout << name;
-	//SetCurrentConsoleFontEx(terminal_out, false, &font_info);
 
 	// 设置字体
 	CONSOLE_FONT_INFOEX fontInfo;
 	fontInfo.cbSize = sizeof(CONSOLE_FONT_INFOEX);
 	fontInfo.dwFontSize.X = 8;
 	fontInfo.dwFontSize.Y = 8;
-	fontInfo.FontFamily = TMPF_TRUETYPE;
+	fontInfo.FontFamily = TMPF_DEVICE;
 	wcscpy_s(fontInfo.FaceName, L"Terminal");
 	if (!SetCurrentConsoleFontEx(terminal_out, FALSE, &fontInfo)) {
 		std::cout << "Failed to change the font: " << GetLastError();
