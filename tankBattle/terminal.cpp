@@ -94,6 +94,17 @@ Terminal::Terminal()
 	//std::wcout << name;
 	//SetCurrentConsoleFontEx(terminal_out, false, &font_info);
 
+	// ÉèÖÃ×ÖÌå
+	CONSOLE_FONT_INFOEX fontInfo;
+	fontInfo.cbSize = sizeof(CONSOLE_FONT_INFOEX);
+	fontInfo.dwFontSize.X = 8;
+	fontInfo.dwFontSize.Y = 8;
+	fontInfo.FontFamily = TMPF_TRUETYPE;
+	wcscpy_s(fontInfo.FaceName, L"Terminal");
+	if (!SetCurrentConsoleFontEx(terminal_out, FALSE, &fontInfo)) {
+		std::cout << "Failed to change the font: " << GetLastError();
+	}
+
 }
 
 Terminal::~Terminal()
