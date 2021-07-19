@@ -68,6 +68,13 @@ void Drawable::move_down(SHORT step)
 	origin_point.Y += step;
 }
 
+void Drawable::move(COORD in_coord)
+{
+	old_point = origin_point;
+	origin_point.Y = in_coord.Y;
+	origin_point.X = in_coord.X;
+}
+
 void Drawable::set_visualable()
 {
 	visualable = true;
@@ -155,5 +162,6 @@ std::shared_ptr<Drawable> get_drawable_from_file(const std::string & filename)
 	}
 	drawable_ptr->origin_point = COORD{ 5,5 }; // 为了观察效果
 	drawable_ptr->old_point = COORD{ 5,5 };
+	drawable_ptr->guid = generate_uuid();
 	return drawable_ptr;
 }

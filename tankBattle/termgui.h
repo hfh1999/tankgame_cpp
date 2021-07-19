@@ -3,10 +3,10 @@
 #pragma once
 #include "terminal.h"
 #include <thread>
-#include <vector>
+#include <set>
+#include <map>
 #include <memory>
 #include "drawable.h"
-#include <map>
 using std::shared_ptr;
 struct KeyEvent {
 	// 参见 https://docs.microsoft.com/en-us/windows/console/key-event-record-str
@@ -32,14 +32,14 @@ public:
 	void renderDrawables();//负责将所有drawable object渲染出来
 
 	bool addDrawable(shared_ptr<Drawable> in_obj, bool is_visuable = true);//加入Drawable object
-	bool removeDrawable(std::string id);//将规定id的对象从列表中移除
+	bool removeDrawable(shared_ptr<Drawable> in_obj);//将规定id的对象从列表中移除
 	bool setVisuable(std::string id, bool visuable_value = true);//设置对象的可见性
 	
 private:
 	HANDLE termapp_in;//输入标识符
 	std::thread event_loop;
 	bool loop_flag = true;//是否停止事件循环
-	std::vector<shared_ptr<Drawable>> obj_list;//app已经管理的Drawable object的列表
+	std::set<shared_ptr<Drawable>> obj_list;//app已经管理的Drawable object的列表
 
 	COORD __coord_trans(COORD in_coord, Drawable::DrawDirect direct);
 

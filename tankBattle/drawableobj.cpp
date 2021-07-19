@@ -21,6 +21,11 @@ void DrawableObj::move_down(SHORT step)
 	ptr_to_Drawable->move_down(step);
 }
 
+void DrawableObj::move(COORD in_coord)
+{
+	ptr_to_Drawable->move(in_coord);
+}
+
 void DrawableObj::turn_left()
 {
 	ptr_to_Drawable->turn_left();

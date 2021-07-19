@@ -78,14 +78,34 @@ bool TermioApp::addDrawable(shared_ptr<Drawable> in_obj, bool is_visuable)
 		return false;  //已经加入过,加入失败
 	else
 	{
-		obj_list.push_back(in_obj);
+		obj_list.insert(in_obj);
 		in_obj->is_managed = true;
 	}
 }
 
-bool TermioApp::removeDrawable(std::string id)
+//加入Drawable object
+
+bool TermioApp::removeDrawable(shared_ptr<Drawable> in_obj)
 {
-	return false;
+	bool flag = false;
+	for (auto it = obj_list.begin(); it != obj_list.end();)
+	{
+		if ((*in_obj).ret_guid() == (*it)->ret_guid())
+		{
+			it = obj_list.erase(it);
+			flag = true;
+			//std::cerr << "drawable = " << obj_list.size();
+			break;
+		}
+		else {
+			it++;
+		}
+	}
+	if (!flag)
+	{
+		std::cerr << ">failed to find.<";
+		return false;
+	}
 }
 
 bool TermioApp::setVisuable(std::string id, bool visuable_value)

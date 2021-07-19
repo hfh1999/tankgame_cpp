@@ -33,6 +33,9 @@
     <ClCompile Include="drawableobj.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="terminal.h">
@@ -56,12 +59,18 @@
     <ClInclude Include="drawableobj.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="tank.draw">
       <Filter>源文件</Filter>
     </None>
     <None Include="wall.draw">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="bullet.draw">
       <Filter>源文件</Filter>
     </None>
   </ItemGroup>

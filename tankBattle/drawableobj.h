@@ -11,6 +11,7 @@ public:
 	void move_right(SHORT step);
 	void move_up(SHORT step);
 	void move_down(SHORT step);
+	void move(COORD in_coord);
 	void turn_left();
 	void turn_right();
 	void turn_up();
@@ -19,7 +20,8 @@ public:
 	void set_unvisualable();
 	void set_static(bool flag);
 	COORD ret_coord() { return ptr_to_Drawable->ret_coord(); }
-private:
+	std::shared_ptr<Drawable> ret_ptr_of_Drawable() { return ptr_to_Drawable; }
+protected:
 	std::shared_ptr<Drawable> ptr_to_Drawable;
 };
 
