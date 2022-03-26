@@ -23,4 +23,4 @@ c++ 写的终端版坦克大战,仅可在windows上编译运行
 #### 演示
 目前只支持四个按键，键盘上的↑ ↓ ← →
 
-![showcase](https://gitee.com/hfh1999/tankgame_cpp/raw/master/showcase.gif)
+![showcase](https://github.com/hfh1999/tankgame_cpp/blob/master/showcase.gif)
